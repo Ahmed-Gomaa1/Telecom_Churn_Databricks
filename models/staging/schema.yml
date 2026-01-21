@@ -1,0 +1,188 @@
+version: 2
+
+models:
+  - name: stg_telecom_churn
+    description: |
+      Cleaned and standardized telecom customer churn data from raw Databricks table.
+      This staging model provides foundational data transformations including:
+      - Type casting and conversions
+      - Column name standardization
+      - Basic null handling
+            
+    columns:
+      # IDENTIFIERS & GEOGRAPHY
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - unique
+          - not_null
+      
+      - name: country
+        description: "Country of residence for the customer"
+        
+      - name: state
+        description: "State of residence for the customer"
+        
+      - name: city
+        description: "City where the customer resides"
+        
+      - name: zip_code
+        description: "Postal code of customer location"
+        
+      - name: latitude
+        description: "Latitude coordinate of customer location"
+        
+      - name: longitude
+        description: "Longitude coordinate of customer location"
+      
+      # DEMOGRAPHICS
+      - name: gender
+        description: "Gender of the customer"
+        
+      - name: age
+        description: "Age of the customer in years"
+        tests:
+          - not_null
+        
+      - name: is_under_30
+        description: "Boolean flag indicating if customer is under 30 years old"
+        
+      - name: is_senior_citizen
+        description: "Boolean flag indicating if customer is a senior citizen"
+        
+      - name: is_married
+        description: "Boolean flag indicating marital status"
+        
+      - name: has_dependents
+        description: "Boolean flag indicating if customer has dependents"
+        
+      - name: number_of_dependents
+        description: "Count of dependents associated with the customer"
+      
+      # CUSTOMER SENTIMENT & STATUS
+      - name: customer_status
+        description: "Current status of the customer (e.g., Active, Churned, Joined)"
+        tests:
+          - not_null
+        
+      - name: satisfaction_score
+        description: "Customer satisfaction score (typically 1-5 scale)"
+        
+      - name: churn_score
+        description: "Calculated score (0-100) estimating likelihood of customer churning"
+        tests:
+          - not_null
+        
+      - name: customer_lifetime_value
+        description: "Total expected revenue from customer over their relationship (CLTV)"
+        
+      - name: has_referred_friend
+        description: "Boolean flag indicating if customer has referred a friend"
+        
+      - name: number_of_referrals
+        description: "Count of referrals made by the customer"
+      
+      # CONTRACT & ACCOUNT INFO
+      - name: tenure_months
+        description: "Duration of customer relationship with company in months"
+        tests:
+          - not_null
+        
+      - name: applied_offer
+        description: "Current promotional offer applied to customer account"
+        
+      - name: contract_type
+        description: "Type of contract (Month-to-Month, One Year, Two Year)"
+        
+      - name: has_paperless_billing
+        description: "Boolean flag indicating if customer uses paperless billing"
+        
+      - name: payment_method
+        description: "Method used for payment (e.g., Bank Transfer, Credit Card)"
+        
+      - name: fiscal_quarter
+        description: "Fiscal quarter when data was captured (Q1-Q4)"
+      
+      # SERVICES & SUBSCRIPTIONS
+      - name: has_phone_service
+        description: "Boolean flag indicating phone service subscription"
+        
+      - name: has_multiple_lines
+        description: "Boolean flag indicating multiple phone lines"
+        
+      - name: has_internet_service
+        description: "Boolean flag indicating internet service subscription"
+        
+      - name: internet_type
+        description: "Type of internet connection (Fiber Optic, DSL, Cable)"
+        
+      - name: has_online_security
+        description: "Boolean flag indicating online security service subscription"
+        
+      - name: has_online_backup
+        description: "Boolean flag indicating online backup service subscription"
+        
+      - name: has_device_protection
+        description: "Boolean flag indicating device protection plan subscription"
+        
+      - name: has_tech_support
+        description: "Boolean flag indicating premium tech support subscription"
+        
+      - name: has_streaming_tv
+        description: "Boolean flag indicating streaming TV service subscription"
+        
+      - name: has_streaming_movies
+        description: "Boolean flag indicating streaming movies service subscription"
+        
+      - name: has_streaming_music
+        description: "Boolean flag indicating streaming music service subscription"
+        
+      - name: has_unlimited_data
+        description: "Boolean flag indicating unlimited data plan subscription"
+      
+      # USAGE METRICS
+      - name: avg_monthly_gb_download
+        description: "Average monthly data download in gigabytes"
+        
+      - name: area_population
+        description: "Population of the area where customer resides"
+      
+      # FINANCIAL METRICS
+      - name: monthly_charge
+        description: "Monthly service charge amount in USD"
+        tests:
+          - not_null
+        
+      - name: avg_monthly_long_distance_charge
+        description: "Average monthly long-distance charges in USD"
+        
+      - name: total_charges
+        description: "Total amount charged to customer over tenure in USD"
+        
+      - name: total_extra_data_charges
+        description: "Total charges for extra data usage in USD"
+        
+      - name: total_long_distance_charges
+        description: "Total long-distance call charges in USD"
+        
+      - name: total_refunds
+        description: "Total amount refunded to customer in USD"
+        
+      - name: total_revenue
+        description: "Total revenue generated from customer in USD"
+        tests:
+          - not_null
+      
+      # CHURN SPECIFICS
+      - name: has_churned
+        description: "Boolean flag indicating if customer has churned"
+        tests:
+          - not_null
+        
+      - name: churn_category
+        description: "Category of churn (e.g., Competitor, Dissatisfaction, Price)"
+        
+      - name: churn_reason
+        description: "Specific reason provided for churning"
+
+  

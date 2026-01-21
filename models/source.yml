@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: databricks_workspace
+    database: workspace         # This is your Catalog
+    schema: telecom_churn       # This is your Schema
+    tables:
+      - name: raw_telecom_churn # This is your UI-uploaded table
