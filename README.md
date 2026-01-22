@@ -43,12 +43,12 @@ graph LR
     end
     
     subgraph dbt_Transformation [dbt Transformation]
-    C[Staging Layer<br/>(Clean & Standardize)]
-    D[Marts Layer<br/>(Star Schema)]
+    C["Staging Layer<br/>(Clean & Standardize)"]
+    D["Marts Layer<br/>(Star Schema)"]
     end
     
     subgraph Analytics_Layer [Analytics]
-    E[BI & Reporting<br/>(Churn Analysis)]
+    E["BI & Reporting<br/>(Churn Analysis)"]
     end
 
     A -->|Ingest| B
