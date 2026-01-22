@@ -25,6 +25,9 @@ models:
     staging:
       +materialized: view
       +tags: ["staging", "telecom"]
+    marts:
+      +materialized: table
+      +tags: ["marting", "telecom"]
       
     # Uncomment when you create marts folder
     # marts:

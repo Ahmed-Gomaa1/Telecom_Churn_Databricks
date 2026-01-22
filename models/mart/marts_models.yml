@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  # -------------------------------------------------------------------
+  # 1. CUSTOMER DIMENSION
+  # -------------------------------------------------------------------
+  - name: dim_customers
+    description: "Static demographic information about customers."
+    columns:
+      - name: customer_key
+        description: "Primary Key. Surrogate key hashed from customer_id."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Natural Key. Used for distinct counts."
+        tests:
+          - unique
+          - not_null
+
+  # -------------------------------------------------------------------
+  # 2. LOCATION DIMENSION
+  # -------------------------------------------------------------------
+  - name: dim_locations
+    description: "Unique list of geographic locations (grain: Zip Code)."
+    columns:
+      - name: location_key
+        description: "Primary Key. Surrogate key hashed from zip_code."
+        tests:
+          - unique
+          - not_null
+      - name: zip_code
+        description: "Natural Key."
+        tests:
+          - unique
+          - not_null
+
+  # -------------------------------------------------------------------
+  # 3. SERVICE FEATURES DIMENSION 
+  # -------------------------------------------------------------------
+  - name: dim_service_features
+    description: "Unique combinations of service add-ons (Security, Backup, Streaming, etc)."
+    columns:
+      - name: service_feature_key
+        description: "Primary Key. Hashed from combination of 8 boolean flags."
+        tests:
+          - unique
+          - not_null
+
+  # -------------------------------------------------------------------
+  # 4. CONTRACTS DIMENSION 
+  # -------------------------------------------------------------------
+  - name: dim_contracts
+    description: "Unique combinations of contract type, payment method, and internet type."
+    columns:
+      - name: contract_key
+        description: "Primary Key. Hashed from contract attributes."
+        tests:
+          - unique
+          - not_null
+
+  # -------------------------------------------------------------------
+  # 5. CHURN DETAILS DIMENSION ( Junk Dimension)
+  # -------------------------------------------------------------------
+  - name: dim_churn_details
+    description: "Unique combinations of churn reasons and categories."
+    columns:
+      - name: churn_details_key
+        description: "Primary Key. Hashed from status, churn flag, and reasons."
+        tests:
+          - unique
+          - not_null
+
+# -------------------------------------------------------------------
+# FACT TABLE CONFIGURATION
+# -------------------------------------------------------------------
+  - name: fct_churn_metrics
+    description: "Central fact table. Keys are generated via hash to match Dimensions."
+    columns:
+      # 1. Customer Key (Links to dim_customers)
+      - name: customer_key
+        description: "Foreign Key. Links to dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+
+      # 2. Location Key (Links to dim_locations)
+      - name: location_key
+        description: "Foreign Key. Links to dim_locations."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_locations')
+              field: location_key
+
+      # 3. Contract Key (Links to dim_contracts)
+      - name: contract_key
+        description: "Foreign Key. Links to dim_contracts (Contract Type + Payment + Offer + Internet)."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_contracts')
+              field: contract_key
+
+      # 4. Service Feature Key (Links to dim_service_features)
+      - name: service_feature_key
+        description: "Foreign Key. Links to dim_service_features (The 8 boolean add-ons)."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_service_features')
+              field: service_feature_key
+
+      # 5. Churn Details Key (Links to dim_churn_details)
+      - name: churn_details_key
+        description: "Foreign Key. Links to dim_churn_details (Status + Reason)."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_churn_details')
+              field: churn_details_key
+
+      # 6. Metrics (Quality Checks)
+      - name: total_revenue
+        tests:
+          - not_null
